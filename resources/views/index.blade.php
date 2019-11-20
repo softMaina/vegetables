@@ -105,7 +105,7 @@
                                               <label>Qty</label>
                                           </div>
                                           <div class="col-md-9">
-                                              <input class="form-control" id="qty" placeholder="2" />
+                                              <input class="form-control" id={{'qty'.$value->id}} placeholder="2" />
                                           </div>
                                       </div>
 
@@ -117,7 +117,7 @@
                                               <label>Time</label>
                                           </div>
                                           <div class="col-md-9">
-                                              <select class="form-control" id="time" style="margin-right: 0;">
+                                              <select class="form-control" id={{ 'time'.$value->id }} style="margin-right: 0;">
                                                   <option selected>Time</option>
                                                   <option value="1">One</option>
                                                   <option value="2">Two</option>
@@ -132,7 +132,7 @@
                                       <label>Frequency</label>
                                   </div>
                                   <div class="col-md-9">
-                                      <input class="form-control" id="frequency" placeholder="select frequency" />
+                                      <input class="form-control" id={{'frequency'.$value->id}} placeholder="select frequency" />
                                   </div>
                               </div>
                           </div>
@@ -141,9 +141,11 @@
                           <script type="text/javascript">
                           $(document).ready(function(){
                           var id = {!!$value->id!!}
+                          var time = "time"+id
+                          var qty = 'qty'+id
+                          var frequency = 'frequency'+id
                           $('#'+id).click(function(e){
                              e.preventDefault();
-                             console.log(id)
                              $.ajaxSetup({
                                 headers: {
                                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -153,9 +155,9 @@
                                 url: "{{ url('/add-to-cart') }}",
                                 method: 'post',
                                 data: {
-                                   name: jQuery('#qty').val(),
-                                   type: jQuery('#time').val(),
-                                   price: jQuery('#frequency').val()
+                                   time: jQuery('#'+time).val(),
+                                   qty: jQuery('#'+qty).val(),
+                                   frequency: jQuery('#'+frequency).val()
                                 },
                                 success: function(result){
                                    console.log(result)
@@ -187,7 +189,11 @@
           <div class="card shadow">
               <div class="card-body">
                   <div class="row">
-                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                      @php
+                        var_dump(Session::get('cart'));
+                    @endphp
+                    </div>
                     <div class="col-md-8">
                         <form >
                           <div class="row">

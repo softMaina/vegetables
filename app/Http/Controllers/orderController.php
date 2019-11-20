@@ -11,7 +11,6 @@ class orderController extends Controller
 
   public function addToCart(Request $request){
     $product = $request;
-
     if(!$product){
       abort(404);
     }
@@ -19,11 +18,28 @@ class orderController extends Controller
     $cart = session()->get('cart');
 
     if(!$cart){
-      // $cart = [$item];
+      $cart = [
+          '1' => [
+            "qty" => $product->qty,
+            "time" => $product->time,
+            "frequency"=>$product->frequency
+          ]
+      ];
       session()->put('cart',$cart);
-      return response()->json(['success'=>$cart]);
+      return response()->json($product);
     }
-    return response('body');
+
+    $cart = [
+        '2' => [
+          "qty" => $product->qty,
+          "time" => $product->time,
+          "frequency"=>$product->frequency
+        ]
+    ];
+
+    session()->push('cart',$cart);
+
+    return response($cart);
   }
 
   public function update(Request $request)
