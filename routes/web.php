@@ -12,8 +12,7 @@
 */
 
 Route::get('/', 'HomeController@index')->name('home');
-Route::post('add-to-cart','orderController@addToCart');
-Route::patch('update-cart', 'orderController@update');
-Route::delete('remove-from-cart', 'orderController@remove');
-Route::post('checkout','orderController@saveOrder');
+Route::post('add-to-cart','OrderController@addToCart');
+Route::delete('remove-from-cart', 'OrderController@remove');
+Route::post('checkout','OrderController@saveOrder');
 Auth::routes();

@@ -95,9 +95,6 @@
                           <h3 class="card-title text-center">{{$value->title}}</h3>
                           <p class="card-text text-center">{{$value->description}}</p>
                           <div>
-
-
-
                               <div class="row">
                                   <div class="col-md-6">
                                       <div class="row">
@@ -108,7 +105,6 @@
                                               <input class="form-control" id={{'qty'.$value->id}} placeholder="2" />
                                           </div>
                                       </div>
-
                                   </div>
 
                                   <div class="col-md-6">
@@ -137,38 +133,6 @@
                               </div>
                           </div>
                           <button  id={{$value->id}} class="btn btn-primary order_button" >Select And Proceed to next</button>
-
-                          <script type="text/javascript">
-                          $(document).ready(function(){
-                          var id = {!!$value->id!!}
-                          var time = "time"+id
-                          var qty = 'qty'+id
-                          var frequency = 'frequency'+id
-                          $('#'+id).click(function(e){
-                             e.preventDefault();
-                             $.ajaxSetup({
-                                headers: {
-                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                }
-                            });
-                             $.ajax({
-                                url: "{{ url('/add-to-cart') }}",
-                                method: 'post',
-                                data: {
-                                   time: jQuery('#'+time).val(),
-                                   qty: jQuery('#'+qty).val(),
-                                   frequency: jQuery('#'+frequency).val()
-                                },
-                                success: function(result){
-                                   console.log(result)
-                                },
-                                failure: function(error){
-                                  console.log(error)
-                                }
-                              });
-                             });
-                          });
-                          </script>
                       </div>
                   </div>
               </div>
@@ -189,11 +153,14 @@
           <div class="card shadow">
               <div class="card-body">
                   <div class="row">
+                    <div class="col-md-12" id="cartJS">
+                    </div>
                     <div class="col-md-4">
-                      @php
+                    @php
                         var_dump(Session::get('cart'));
                     @endphp
                     </div>
+                    
                     <div class="col-md-8">
                         <form >
                           <div class="row">
@@ -215,18 +182,9 @@
                             <div class="form-group">
                                 <input type="text" class="form-control" name="address" id="city" placeholder="Enter location"/>
                                 <div id="map" style="width:100%;height:200px;"></div>
-                                <script type="text/javascript">
-                                  function initialize() {
-                                      // var options = {
-                                      //     types: ['(cities)'],
-                                      //     componentRestrictions: {country: "in"}
-                                      // };
-                                      var input = document.getElementById('city');
-                                      var autocomplete = new google.maps.places.Autocomplete(input);
-                                  }
-                                  google.maps.event.addDomListener(window, 'load', initialize);
-                                </script>
+                               
                            </div>
+                            <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
                             <button type="submit" class="btn btn-primary order_button">Submit</button>
                         </form>
 
@@ -239,4 +197,54 @@
   </section>
   @include('layouts.modals.signup')
   @include('layouts.modals.signin')
+@endsection
+
+@section('script')
+<script type="text/javascript">
+    $(document).ready(function(){
+        let products = @json($products);
+        let url = "{{ url('/add-to-cart') }}";
+
+        $('.order_button').click(function(e){
+            let idOfClickedItem = e.target.id;
+            let orderItem = products.find((element) => element.id > idOfClickedItem);
+            //console.log(idOfClickedItem);
+
+            let selectedTime = $("#time"+idOfClickedItem+" option:selected" ).val();
+            let selectedQuantity = $("#qty"+idOfClickedItem).val();
+            let selectedFrequency = $("#frequency"+idOfClickedItem).val();
+
+            e.preventDefault();
+            $.ajax({
+                url: url,
+                method: 'post',
+                data: {
+                    id: idOfClickedItem,
+                    time: selectedTime,
+                    qty: selectedQuantity,
+                    frequency: selectedFrequency,
+                    "_token": $('#token').val()
+                },
+                success: function(result){
+                    console.log(result)
+                    //$('#cartJS').text(JSON.parse(result));
+                },
+                failure: function(error){
+                    console.log(error)
+                }
+            });
+        });
+    });
+
+    function initialize() {
+        // var options = {
+        //     types: ['(cities)'],
+        //     componentRestrictions: {country: "in"}
+        // };
+        var input = document.getElementById('city');
+        var autocomplete = new google.maps.places.Autocomplete(input);
+    }
+    google.maps.event.addDomListener(window, 'load', initialize);
+
+</script>
 @endsection

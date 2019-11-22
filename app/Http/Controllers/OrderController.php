@@ -6,40 +6,34 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 
-class orderController extends Controller
+class OrderController extends Controller
 {
 
   public function addToCart(Request $request){
-    $product = $request;
-    if(!$product){
-      abort(404);
-    }
-
+    //Initialize or define the Cart
+    session()->forget('cart');
     $cart = session()->get('cart');
+    $request->replace($request->except(['_token']));
 
     if(!$cart){
-      $cart = [
-          '1' => [
-            "qty" => $product->qty,
-            "time" => $product->time,
-            "frequency"=>$product->frequency
-          ]
-      ];
-      session()->put('cart',$cart);
-      return response()->json($product);
+      session()->push('cart',$request->all());
+    }else{
+      $itemInCart = false;
+      foreach ($cart as $key => $item) {
+        # code...
+        $item = json_decode(json_encode($item));
+        if($request->input('id') == $item->id){
+          $cart[$key] = $request->all();
+          $itemInCart = true;
+          session(['cart' => $cart]);
+        }
+      }
+      if($itemInCart == false){
+        session()->push('cart',$request->all());
+      }
     }
 
-    $cart = [
-        '2' => [
-          "qty" => $product->qty,
-          "time" => $product->time,
-          "frequency"=>$product->frequency
-        ]
-    ];
-
-    session()->push('cart',$cart);
-
-    return response($cart);
+    return response()->json(session()->get('cart'));
   }
 
   public function update(Request $request)

@@ -21,7 +21,7 @@ return [
         'app_id'      => '', // Used for Adaptive Payments API
     ],
 
-    'payment_action' => 'Sale', // Can only be 'Sale', 'Authorization' or 'Order'
+    'payment_action' => 'Order', // Can only be 'Sale', 'Authorization' or 'Order'
     'currency'       => env('PAYPAL_CURRENCY', 'USD'),
     'billing_type'   => 'MerchantInitiatedBilling',
     'notify_url'     => '', // Change this accordingly for your application.
