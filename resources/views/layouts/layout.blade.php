@@ -16,6 +16,7 @@
 <body>
 
     <!-- navbar -->
+    
     <nav class="navbar navbar-light bg-navy">
         <div class="container">
             <ul class="nav nav-pills nav-white">
@@ -26,7 +27,10 @@
                     <a class="nav-link" href="#" data-toggle="modal" data-target="#signupmodal">SIGN UP</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Contact Us | Call us 012-3847961</a>
+                    <a class="nav-link" href="#">Contact Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="tel:012-3847961"> | Call Now 012-3847961</a>
                 </li>
             </ul>
         </div>

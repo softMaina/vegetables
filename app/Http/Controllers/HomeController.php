@@ -25,37 +25,37 @@ class HomeController extends Controller
     {   $products = collect([
             (object)[
               'id' => 1,
-              'price'=> 'RM 50',
+              'price'=> '50',
               'title'=> 'Mixed Vegetable Box',
               'description'=> 'We will ensure there is good random mix of all vegetables'
             ],
             (object)[
               'id' => 2,
-              'price'=> 'RM 25',
+              'price'=> '25',
               'title'=> 'Fresh Chicken Box',
               'description'=> 'Live whole chicken cut on the same day delivery'
             ],
             (object)[
               'id' => 3,
-              'price'=> 'RM 35',
+              'price'=> '35',
               'title'=> 'Local Goat Box',
               'description'=> 'Live local goat cut on the same day delivery'
             ],
             (object)[
               'id' => 4,
-              'price'=> 'RM 50',
+              'price'=> '50',
               'title'=> 'Lamb Box',
               'description'=> 'Good And Fresh Frozen lamb box delivery'
             ],
             (object)[
               'id' => 5,
-              'price'=> 'RM 35',
+              'price'=> '35',
               'title'=> 'Beef Box',
               'description'=> 'Live local beef cut on the same day delivery'
             ],
             (object)[
               'id' => 6,
-              'price'=> 'RM 50',
+              'price'=> '50',
               'title'=> 'Seafood Box',
               'description'=> 'Fresh and good mix of fish, Prawns, Crabs, Squids'
             ],

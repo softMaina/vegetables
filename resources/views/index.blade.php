@@ -2,6 +2,11 @@
 
 @section('content')
   <!-- landing page -->
+  <div class="floating">
+    <a href="https://wa.me/+254710345130" >
+        <img src="/img/whatsapp.png" width="50px"/>
+    </a>
+  </div>
   <section class="landing">
       <div class="row overlay">
           <div class="container headlines">
@@ -89,58 +94,57 @@
             @foreach ($products as $key => $value)
               <div class="col-md-4">
                   <div class="card shadow p-3 mb-5 bg-white" style="width: 20rem; margin:10; border-radius: 3%;">
-                      <img class="card-img-top" src="./static/img/grocer.png" alt="Card image cap">
+                      <img class="card-img-top" src="./static/img/grocer.png" alt="Card image cap" id={{'img'.$value->id}}>
                       <div class="card-body">
-                          <h5 class="card-title text-center theme_text">{{$value->price}}</h5>
-                          <h3 class="card-title text-center">{{$value->title}}</h3>
+                          <h5 class="card-title text-center theme_text" id={{'price'.$value->id}}>{{$value->price}}</h5>
+                          <h3 class="card-title text-center" id={{'title'.$value->id}}>{{$value->title}}</h3>
                           <p class="card-text text-center">{{$value->description}}</p>
                           <div>
                               <div class="row">
                                   <div class="col-md-6">
                                       <div class="row">
-                                          <div class="col-md-3 control-label">
+                                          <div class="col-md-12 control-label">
                                               <label>Qty</label>
                                           </div>
-                                          <div class="col-md-9">
-                                              <input class="form-control" id={{'qty'.$value->id}} placeholder="2" />
+                                          <div class="col-md-12">
+                                              <input class="form-control" id={{'qty'.$value->id}} placeholder="2" type="text"/>
                                           </div>
                                       </div>
                                   </div>
 
                                   <div class="col-md-6">
                                       <div class="row form-group">
-                                          <div class="col-md-2 control-label">
+                                          <div class="col-md-12 control-label">
                                               <label>Time</label>
                                           </div>
-                                          <div class="col-md-9">
-                                              <select class="form-control" id={{ 'time'.$value->id }} style="margin-right: 0;">
-                                                  <option selected>Time</option>
-                                                  <option value="1">One</option>
-                                                  <option value="2">Two</option>
-                                                  <option value="3">Three</option>
-                                              </select>
+                                          <div class="col-md-12">
+                                              <input class="form-control" id={{'time'.$value->id}} type="text" placeholder="4:00 PM">
                                           </div>
                                       </div>
                                   </div>
                               </div>
                               <div class="row">
-                                  <div class="col-md-3 label-control">
+                                  <div class="col-md-12 label-control">
                                       <label>Frequency</label>
                                   </div>
-                                  <div class="col-md-9">
-                                      <input class="form-control" id={{'frequency'.$value->id}} placeholder="select frequency" />
+                                  <div class="col-md-12">
+                                    <select id={{'frequency'.$value->id}} placeholder="select frequency" class="form-control">
+                                        <option selected>One time delivery</option>
+                                        <option value="EverySunday">Every Sunday</option>
+                                        <option value="EverySaturday">Every Saturday</option>
+                                        <option value="EveryMonday">Every Monday</option>
+                                        <option value="EveryTuesday">Every Tuesday</option>
+                                        <option value="EveryWednesday">Every Wednesday</option>
+                                    </select>
                                   </div>
                               </div>
                           </div>
-                          <button  id={{$value->id}} class="btn btn-primary order_button" >Select And Proceed to next</button>
+                          <button id={{$value->id}} class="btn btn-success addToCart" style="margin-top:0.8em" >Select And Proceed to next</button>
                       </div>
                   </div>
               </div>
             @endforeach
-
-
           </div>
-
       </div>
   </section>
 
@@ -156,36 +160,36 @@
                     <div class="col-md-12" id="cartJS">
                     </div>
                     <div class="col-md-4">
-                    @php
-                        var_dump(Session::get('cart'));
-                    @endphp
+                        <h4>My Cart</h4>
+                        <div id="showMyCart"></div>
                     </div>
                     
                     <div class="col-md-8">
-                        <form >
+                        <form id="shippingData">
                           <div class="row">
                             <div class="col-md-6 form-group">
-                                <input type="text" class="form-control"
-                                    name="name" placeholder="Name">
+                                <input type="text" class="form-control" id="shippingname"
+                                    name="shippingname" placeholder="Name" required>
                             </div>
                             <div class="col-md-6 form-group">
-                                <input type="text" class="form-control"
-                                    name="mobile" placeholder="Mobile">
+                                <input type="text" class="form-control" id="shippingmobile"
+                                    name="shippingmobile" placeholder="Mobile" required>
                             </div>
                           </div>
 
                             <div class="form-group">
-                                <input type="email" class="form-control"
-                                    placeholder="Email">
+                                <input type="email" id="emailShipping" class="form-control" placeholder="Email" name="shippingemail" required>
                             </div>
-
                             <div class="form-group">
-                                <input type="text" class="form-control" name="address" id="city" placeholder="Enter location"/>
-                                <div id="map" style="width:100%;height:200px;"></div>
-                               
+                                <textarea class="form-control" name="shippingremarks" id="shippingremarks" placeholder="Enter Remarks" required></textarea>
                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="shippingaddress" id="shippingaddress" placeholder="Enter location" required/>
+                                <div id="map" style="width:100%;height:200px;"></div>                               
+                           </div>
+                           
                             <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
-                            <button type="submit" class="btn btn-primary order_button">Submit</button>
+                            <button type="submit" class="btn btn-primary order_button" id="checkout" onclick="return false;">Submit</button>
                         </form>
 
 
@@ -194,39 +198,59 @@
               </div>
           </div>
       </div>
+       
   </section>
   @include('layouts.modals.signup')
   @include('layouts.modals.signin')
+  @include('layouts.modals.loader')
 @endsection
 
 @section('script')
 <script type="text/javascript">
     $(document).ready(function(){
         let products = @json($products);
-        let url = "{{ url('/add-to-cart') }}";
+        $('#loadingDiv')
+            .hide()  // Hide it initially
+            .ajaxStart(function() {
+                $(this).show();
+            })
+            .ajaxStop(function() {
+                $(this).hide();
+            });
+        let urlAddToCart = "{{ url('/add-to-cart') }}";
+        let urlCheckout = "{{ url('/checkout') }}";
+        let urlRemoveFromCart = "{{ url('/remove-from-cart') }}";
 
-        $('.order_button').click(function(e){
+        //ADD TO CART
+        $('.addToCart').click(function(e){
             let idOfClickedItem = e.target.id;
             let orderItem = products.find((element) => element.id > idOfClickedItem);
             //console.log(idOfClickedItem);
 
-            let selectedTime = $("#time"+idOfClickedItem+" option:selected" ).val();
+            let selectedTime = $("#time"+idOfClickedItem).val();
             let selectedQuantity = $("#qty"+idOfClickedItem).val();
             let selectedFrequency = $("#frequency"+idOfClickedItem).val();
+            let selectedImg = $("#img"+idOfClickedItem).attr('src');
+            let selectedTitle = $("#title"+idOfClickedItem).text();
+            let selectedPrice = $("#price"+idOfClickedItem).text();
 
             e.preventDefault();
             $.ajax({
-                url: url,
+                url: urlAddToCart,
                 method: 'post',
                 data: {
                     id: idOfClickedItem,
                     time: selectedTime,
                     qty: selectedQuantity,
                     frequency: selectedFrequency,
+                    img: selectedImg,
+                    title: selectedTitle,
+                    price: selectedPrice,
                     "_token": $('#token').val()
                 },
                 success: function(result){
                     console.log(result)
+                    showCart(result);
                     //$('#cartJS').text(JSON.parse(result));
                 },
                 failure: function(error){
@@ -234,7 +258,104 @@
                 }
             });
         });
+
+        //CHECKOUT
+        $('#checkout').click(function(e){
+            if(validateShippingForm()){
+                let shippingName = $("#shippingname").val();
+                let shippingMobile = $("#shippingmobile").val();
+                let shippingEmail = $("#shippingemail").val();
+                let shippingRemarks = $("#shippingremarks").val();
+                let shippingAddress = $("#shippingaddress").val();
+                console.log(shippingName);
+                console.log(shippingMobile);
+
+                $("#loadingModal").modal("show");
+                $.ajax({
+                    url: urlCheckout,
+                    method: 'post',
+                    data: {
+                        shippingName,
+                        shippingMobile,
+                        shippingEmail,
+                        shippingRemarks,
+                        shippingAddress,
+                        "_token": $('#token').val()
+                    },
+                    success: function(result){
+                        console.log(result);
+                        $("#loadingModal").modal("hide");
+                        window.location.replace(result);
+                        //$('#cartJS').text(JSON.parse(result));
+                    },
+                    failure: function(error){
+                        $("#loadingModal").modal("hide");
+                        alert("Sorry, Something went wrong");
+                        console.log(error)
+                    }
+                });
+            }            
+        }); 
+
+        //REMOVE FROM CART
+        $('body').on('click', '.removeFromCart', function(e){
+            let idOfClickedItem = e.target.id;
+            //alert("delete");
+            e.preventDefault();
+            $.ajax({
+                url: urlRemoveFromCart,
+                method: 'delete',
+                data: {
+                    "id": idOfClickedItem,
+                    "_token": $('#token').val()
+                },
+                success: function(result){
+                    console.log(result)
+                    showCart(result);
+                    //$('#cartJS').text(JSON.parse(result));
+                },
+                failure: function(error){
+                    console.log(error)
+                }
+            });
+        }); 
+         
+
+        //Cart Editor
+        let showCart = (cart) => {
+            $('#showMyCart').html("");
+            cart.forEach(item => {
+                let imgDiv = $("<img src='"+item.img+"' width='100px' />");
+                let trashIcon = $("<i class='fas fa-trash float-right removeFromCart' id="+item.id+" style='cursor: pointer;'></i>");
+                let timeDiv = $("<div><strong>Time:</strong>"+item.time+"</div>");
+                let frequencyDiv = $("<div><strong>Frequency:</strong>"+item.frequency+"</div>");
+                let qtyDiv = $("<div><strong>Quantity:</strong>"+item.qty+"</div>"); 
+                let card = $("<div class='card'></div>");
+                let cardBody = $("<div class='card-body'></div>");
+                card.append(imgDiv);
+                cardBody.append(trashIcon,timeDiv,frequencyDiv,qtyDiv);
+                card.append(cardBody);
+                $('#showMyCart').append(card);
+            });
+        }
+        
+        //validate shipping form
+        let validateShippingForm = () => {
+
+            var formValid = true;
+            $('#shippingData input').each(function() {
+                if ($(this).val() === '') {
+                    formValid = false;
+                }
+            });
+
+            if (!formValid)
+                alert('One or Two fields in shipping info are empty. Please fill up all fields');
+            return formValid;
+        }     
     });
+
+        
 
     function initialize() {
         // var options = {

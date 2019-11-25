@@ -55,9 +55,12 @@
                                 </div>
                         </li>
                     @endguest
-                      <li class="nav-item">
-                          <a class="nav-link" href="#">Contact Us | Call us 012-3847961</a>
-                      </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="tel:012-3847961">|    Call Now 012-3847961</a>
+                    </li>
                   </ul>
                 </div>
             </div>
